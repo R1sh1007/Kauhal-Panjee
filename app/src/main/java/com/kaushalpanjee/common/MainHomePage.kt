@@ -105,7 +105,6 @@ class MainHomePage : BaseFragment<FragmentMainHomeBinding>(FragmentMainHomeBindi
         init()
         commonViewModel.getBannerAPI(AppUtil.getSavedTokenPreference(requireContext()),BannerReq(BuildConfig.VERSION_NAME,userPreferences.getUseID(),AppUtil.getAndroidId(requireContext())))
         collectBannerResponse()
-
     }
      private fun init(){
          val drawerLayout = binding.drawerLayout
@@ -184,10 +183,8 @@ class MainHomePage : BaseFragment<FragmentMainHomeBinding>(FragmentMainHomeBindi
      searchQuery.observe(viewLifecycleOwner) { query ->
          if (query.length >= 4) {
              handleTrainingSearchQuery(query) // Trigger API call
-
          }
          else  binding.trainingRecyclerView.gone()
-
      }
 
      // Add TextWatcher to EditText

@@ -13,7 +13,7 @@ object AppConstant {
         const val BUCKET_CATEGORY= "category/"
        // const val FACE_AUTH_UIADI= "https://nregarep2.nic.in/Netnrega/StateServices/Uid_Face_Auth.svc/PostOnAUA_Face_auth"
         const val FACE_AUTH_UIADI= "https://nregarep2.nic.in/uid/stateservices/Uid_Face_Auth_DDUGKY.svc/PostOnAUA_Face_auth"
-     //const val baseUrl= "http://10.197.183.177:8001/"                        //local
+       //const val baseUrl= "http://10.197.183.177:8001/"                        //local
         const val baseUrl= "https://kaushal.rural.gov.in/backend/"             //live
       //const val baseUrl= "https://kaushal.rural.gov.in/demobackend/"             //demo
 

@@ -3,6 +3,7 @@ package com.kaushalpanjee.uidai.crypto;
 import android.util.Base64;
 
 import com.kaushalpanjee.core.util.AppConstant;
+import com.kaushalpanjee.security.SecurityUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidAlgorithmParameterException;
@@ -47,7 +48,7 @@ public class CryptLib {
     public CryptLib() {
 
         try{
-            _cx = Cipher.getInstance(AppConstant.Constants.CRYPLIBAES);
+            _cx = Cipher.getInstance(SecurityUtils.getCryptLibAes());
             _key = new byte[16]; //256 bit key space
             _iv = new byte[16]; //128 bit IV
         }catch (Exception exp ){
@@ -231,7 +232,7 @@ public class CryptLib {
             InvalidAlgorithmParameterException, IllegalBlockSizeException,
             BadPaddingException {
 
-        return encryptDecrypt(_plainText, AppConstant.Constants.CRYPT_ID, EncryptMode.ENCRYPT, AppConstant.Constants.CRYPT_IV);
+        return encryptDecrypt(_plainText, SecurityUtils.getCryptId(), EncryptMode.ENCRYPT, SecurityUtils.getCryptIv());
     }
 
     /***

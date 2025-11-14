@@ -1,7 +1,7 @@
 package com.kaushalpanjee.uidai.crypto
 
-import com.kaushalpanjee.core.util.AppConstant.Constants.CRYPT_ID
-import com.kaushalpanjee.core.util.AppConstant.Constants.CRYPT_IV
+
+import com.kaushalpanjee.security.SecurityUtils
 import java.lang.Exception
 import javax.inject.Inject
 
@@ -14,6 +14,6 @@ class DecryptionImpl @Inject constructor(private val cryptLib: CryptLib) : Crypt
 
     @Throws(Exception::class)
     override fun decrypt(data: String): String {
-        return cryptLib.decrypt(data, CRYPT_ID, CRYPT_IV)
+        return cryptLib.decrypt(data, SecurityUtils.getCryptId(), SecurityUtils.getCryptIv())
     }
 }

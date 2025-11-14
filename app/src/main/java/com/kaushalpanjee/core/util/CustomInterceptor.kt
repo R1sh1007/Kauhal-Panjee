@@ -6,6 +6,7 @@ import com.google.gson.Gson
 import com.kaushalpanjee.BuildConfig
 import com.utilize.core.domain.model.response.RefreshTokenResponse
 import com.kaushalpanjee.core.util.AppUtil.getTimeZone
+import com.kaushalpanjee.security.SecurityUtils
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
@@ -56,8 +57,11 @@ class CustomInterceptor @Inject constructor(
                     "user-agent",
                     "App/${BuildConfig.VERSION_NAME} (Android ${Build.VERSION.RELEASE})"
                 )
-                requestBuilder.addHeader("client_secret", BuildConfig.CLIENT_SECRET_KEY)
-                requestBuilder.url(BuildConfig.REFRESH_TOKEN_URL)
+               // requestBuilder.addHeader("client_secret", BuildConfig.CLIENT_SECRET_KEY)
+                requestBuilder.addHeader("client_secret", SecurityUtils.getClientSecretKey())
+                //requestBuilder.url(BuildConfig.REFRESH_TOKEN_URL)
+                requestBuilder.url(SecurityUtils.getRefreshTokenUrl())
+
                 requestBuilder.post(
                     RequestBody.create(
                         "application/json".toMediaTypeOrNull(),
@@ -134,7 +138,8 @@ class CustomInterceptor @Inject constructor(
         if (isPostLogin) {
             reqBuilder.addHeader("authorization", userPreferences.getAccessToken())
         } else {
-            reqBuilder.addHeader("client_secret", BuildConfig.CLIENT_SECRET_KEY)
+            //reqBuilder.addHeader("client_secret", BuildConfig.CLIENT_SECRET_KEY)
+            reqBuilder.addHeader("client_secret", SecurityUtils.getClientSecretKey())
         }
 
     /*    if (method == "GET") {

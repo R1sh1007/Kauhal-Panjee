@@ -32,9 +32,7 @@ class CommonActivity : BaseActivity<ActivityCommonBinding>(ActivityCommonBinding
         navController = navHostFragment.navController
         val graphInflater = navHostFragment.navController.navInflater
         val navGraph = graphInflater.inflate(R.navigation.nav_graph)
-
         val isLoggedIn = AppUtil.getLoginStatus(this)
-
         if (isLoggedIn) {
             navGraph.setStartDestination(R.id.mainHomePage)
         } else {

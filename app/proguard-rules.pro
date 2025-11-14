@@ -29,7 +29,6 @@
 -keep class com.kaushalpanjee.model.kyc_resp_pojo.** { *; }
 -keep class com.kaushalpanjee.model.** { *; }
 
-
 -keepclassmembers class * {
     @org.simpleframework.xml.* <fields>;
     @org.simpleframework.xml.* <methods>;
@@ -81,7 +80,6 @@
 -keep class com.squareup.moshi.** { *; }
 -dontwarn com.squareup.moshi.**
 
-
 -keepclassmembers class com.kaushalpanjee.core.util.CustomInterceptor {
     public <methods>;
 }
@@ -90,9 +88,4 @@
 
 #-keep class org.simpleframework.* { *; }
 #-keepclasseswithmembers class org.simpleframework.** { *; }
-
-
-
-
-
 

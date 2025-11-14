@@ -28,7 +28,25 @@ android {
 
         // ✅ Correct Kotlin DSL syntax for keeping all language resources
         resourceConfigurations += listOf("en", "hi", "as", "bn", "gu", "kn", "ml", "mr", "or", "pa", "ta", "te", "ur")
+
+        externalNativeBuild {
+            cmake {
+                cppFlags += "-std=c++17"
+            }
+        }
+
+        ndk {
+            abiFilters += listOf("arm64-v8a", "armeabi-v7a", "x86", "x86_64")
+        }
     }
+
+    externalNativeBuild {
+        cmake {
+            path = file("src/main/cpp/CMakeLists.txt")
+        }
+    }
+
+
 
     // ✅ Prevent Google Play from splitting languages (needed for in-app switching)
     bundle {
@@ -41,15 +59,7 @@ android {
         release {
             isMinifyEnabled = true
             isShrinkResources = true
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-
-            buildConfigField("String", "CLIENT_SECRET_KEY", projectProperties["CLIENT_SECRET_KEY"] as String)
-            buildConfigField("String", "REFRESH_TOKEN_URL", projectProperties["REFRESH_TOKEN_URL"] as String)
-            buildConfigField("String", "ENCRYPT_KEY", projectProperties["ENCRYPT_KEY"] as String)
-            buildConfigField("String", "ENCRYPT_IV_KEY", projectProperties["ENCRYPT_IV_KEY"] as String)
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
 
         debug {
@@ -58,12 +68,6 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-
-            buildConfigField("String", "CLIENT_SECRET_KEY", projectProperties["CLIENT_SECRET_KEY"] as String)
-            buildConfigField("String", "REFRESH_TOKEN_URL", projectProperties["REFRESH_TOKEN_URL"] as String)
-            buildConfigField("String", "ENCRYPT_KEY", projectProperties["ENCRYPT_KEY"] as String)
-            buildConfigField("String", "ENCRYPT_IV_KEY", projectProperties["ENCRYPT_IV_KEY"] as String)
-
         }
     }
 
@@ -77,9 +81,11 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+
     kotlinOptions {
         jvmTarget = "1.8"
     }
+
     flavorDimensions += listOf("app")
     productFlavors {
         create("dev") {

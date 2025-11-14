@@ -213,6 +213,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
 
                     is Resource.Success -> {
                         hideProgressBar()
+
                         it.data?.let { getLoginResponse ->
                             when (getLoginResponse.responseCode) {
                                 200 -> {

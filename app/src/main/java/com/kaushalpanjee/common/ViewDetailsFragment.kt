@@ -57,6 +57,7 @@ import com.kaushalpanjee.core.util.gone
 import com.kaushalpanjee.core.util.setDrawable
 import com.kaushalpanjee.core.util.visible
 import com.kaushalpanjee.databinding.FragmentViewDetailsBinding
+import com.kaushalpanjee.security.SecurityUtils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.io.File
@@ -346,7 +347,6 @@ class ViewDetailsFragment : BaseFragment<FragmentViewDetailsBinding>(FragmentVie
 
 
                                 for (x in userAadhaarDetailsList) {
-
                                     val decryptedUserName = AESCryptography.decryptIntoString(x.userName,
                                         AppConstant.Constants.ENCRYPT_KEY,
                                         AppConstant.Constants.ENCRYPT_IV_KEY)

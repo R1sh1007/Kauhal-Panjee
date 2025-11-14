@@ -46,7 +46,6 @@
                 android:id="@+id/ivRSETI"
                 android:src="@drawable/ic_rseti"
                 android:layout_marginStart="@dimen/dp_20"
-
                 />
 
         </LinearLayout>

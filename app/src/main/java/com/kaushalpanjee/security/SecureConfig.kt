@@ -1,4 +1,4 @@
-package com.rsetiapp.security
+package com.kaushalpanjee.security
 
 import android.util.Log
 
@@ -6,6 +6,7 @@ import android.util.Log
  * Created by Rishi Porwal
  */
 object SecureConfig {
+
 
     init {
         try{
@@ -21,8 +22,7 @@ object SecureConfig {
     private external fun getEncryptKeyNative(): String
     private external fun getCryptLibAesNative(): String
     private external fun getCryptIdNative(): String
-    private external fun getCryptIvNative(): String
-
+    private external fun getCryptIvNative():String
     private external fun getKeyByNameNative(keyName: String): String
 
     private external fun nativeRefreshTokenUrl(): String

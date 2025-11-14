@@ -307,10 +307,7 @@ class MainHomePage : BaseFragment<FragmentMainHomeBinding>(FragmentMainHomeBindi
                                         AppConstant.Constants.ENCRYPT_IV_KEY
                                     ) ?: "N/A"
 
-                                    AppUtil.saveAadhaarPreference(requireContext(),decryptedAadhaar
-                                    )
-
-
+                                    AppUtil.saveAadhaarPreference(requireContext(),decryptedAadhaar)
                                 }
                                 if (isFaceReg=="N"){
                                     val userId = userPreferences.getUseID()

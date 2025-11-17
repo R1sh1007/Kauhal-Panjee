@@ -72,7 +72,6 @@ class WelcomeActivity : BaseActivity<ActivityWelcomeBinding>(
         return paths.any { File(it).exists() }
     }
 
-
     /**
      * Checks if the app is running on an emulator.
      */

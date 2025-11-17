@@ -9,7 +9,9 @@ import android.net.Uri
 import android.text.TextWatcher
 import android.view.View
 import androidx.activity.OnBackPressedCallback
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.startActivity
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavOptions
@@ -24,6 +26,7 @@ import com.kaushalpanjee.core.util.AppUtil
 import com.kaushalpanjee.core.util.Resource
 import com.kaushalpanjee.core.util.log
 import com.kaushalpanjee.core.util.onRightDrawableClicked
+import com.kaushalpanjee.core.util.optimize.CrashlyticsUtil
 import com.kaushalpanjee.core.util.setRightDrawablePassword
 import com.kaushalpanjee.core.util.toastShort
 import com.kaushalpanjee.databinding.FragmentLoginBinding
@@ -173,12 +176,9 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
 
         binding.tvForgotPassword.setOnClickListener {
             findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToForgotPassViaAadhaarFragment())
-
-
         }
 
         binding.etPassword.onRightDrawableClicked {
-
             log("onRightDrawableClicked", "onRightDrawableClicked")
             if (showPassword) {
                 showPassword = false
@@ -253,7 +253,8 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
                                 301 -> {
                                     showSnackBar(getLoginResponse.responseDesc)
                                     //Update app
-                                    showUpdateDialog()
+                                   // showUpdateDialog()
+                                    showUpdateDialog(requireContext(),"com.kaushalpanjee")
 
                                 }
 
@@ -292,77 +293,94 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
     }
 
 
+//    private fun collectTokenResponse() {
+//        lifecycleScope.launch {
+//            collectLatestLifecycleFlow(commonViewModel.getToken) {
+//                when (it) {
+//                    is Resource.Loading -> showProgressBar()
+//                    is Resource.Error -> {
+//                        hideProgressBar()
+//                        it.error?.let { baseErrorResponse ->
+//                            toastShort(baseErrorResponse.message)
+//                        }
+//                    }
+//
+//                    is Resource.Success -> {
+//                        hideProgressBar()
+//                        it.data?.let { getToken ->
+//                            when (getToken.responseCode) {
+//                                200 -> {
+//
+//                                   token= AESCryptography.decryptIntoString(getToken.authToken,AppConstant.Constants.ENCRYPT_KEY,AppConstant.Constants.ENCRYPT_IV_KEY)
+//                                   saltPassword= AESCryptography.decryptIntoString(getToken.passString,AppConstant.Constants.ENCRYPT_KEY,AppConstant.Constants.ENCRYPT_IV_KEY)
+//
+//                            //        Log.d("saltPass", "saltPass:  "+ saltPassword)
+//
+//
+//                                }
+//                                301 -> {
+//                                    //Update app
+//                                    showUpdateDialog(requireContext(),"com.kaushalpanjee")
+//
+//                                }
+//
+//                                else -> {
+//                                    showSnackBar(getToken.responseDesc)
+//
+//                                }
+//                            }
+//                        } ?: showSnackBar("Internal Server Error")
+//                    }
+//                }
+//            }
+//        }
+//    }
+
     private fun collectTokenResponse() {
         lifecycleScope.launch {
             collectLatestLifecycleFlow(commonViewModel.getToken) {
                 when (it) {
                     is Resource.Loading -> showProgressBar()
-                    is Resource.Error -> {
+                    is Resource.Error ->{
                         hideProgressBar()
-                        it.error?.let { baseErrorResponse ->
-                            toastShort(baseErrorResponse.message)
-                        }
+                        showSnackBar(it.error?.message ?: "Something went wrong")
+                       // CrashlyticsUtil.logMessage("Token API failed")
+                       //  it.error?.let { e->CrashlyticsUtil.logException()  }
+                       // res.error?.throwable?.let { CrashlyticsUtil.logException(it) }
                     }
-
-                    is Resource.Success -> {
+                    is Resource.Success ->{
                         hideProgressBar()
-                        it.data?.let { getToken ->
-                            when (getToken.responseCode) {
-                                200 -> {
+                        val data = it.data ?: return@collectLatestLifecycleFlow
+                        when (data.responseCode) {
+                            200 -> {
+                                try {
+                                    token = AESCryptography.decryptIntoString(
+                                        data.authToken,
+                                        AppConstant.Constants.ENCRYPT_KEY,
+                                        AppConstant.Constants.ENCRYPT_IV_KEY
+                                    )
 
-                                   token= AESCryptography.decryptIntoString(getToken.authToken,AppConstant.Constants.ENCRYPT_KEY,AppConstant.Constants.ENCRYPT_IV_KEY)
-                                   saltPassword= AESCryptography.decryptIntoString(getToken.passString,AppConstant.Constants.ENCRYPT_KEY,AppConstant.Constants.ENCRYPT_IV_KEY)
+                                    saltPassword = AESCryptography.decryptIntoString(
+                                        data.passString,
+                                        AppConstant.Constants.ENCRYPT_KEY,
+                                        AppConstant.Constants.ENCRYPT_IV_KEY
+                                    )
 
-                            //        Log.d("saltPass", "saltPass:  "+ saltPassword)
-
-
-                                }
-                                301 -> {
-                                    //Update app
-                                    showUpdateDialog()
-
-                                }
-
-                                else -> {
-                                    showSnackBar(getToken.responseDesc)
-
+                                } catch (e: Exception) {
+                                    CrashlyticsUtil.logException(e)
+                                    showSnackBar("Decryption failed!")
                                 }
                             }
-                        } ?: showSnackBar("Internal Server Error")
+                            301 -> showUpdateDialog(requireContext(),"com.kaushalpanjee")
+                            else -> showSnackBar(data.responseDesc)
+
+                        }
                     }
+                }
+
                 }
             }
         }
     }
 
-
-    private fun showUpdateDialog() {
-        val builder = AlertDialog.Builder(requireContext()) // 🔥 use requireContext() inside Fragment
-        builder.setTitle("Update Available")
-        builder.setMessage("A new version of the app is available. Please update to continue.")
-
-        builder.setPositiveButton("Update") { dialog, _ ->
-            val appPackageName = "com.kaushalpanjee"
-            try {
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$appPackageName"))
-                intent.setPackage("com.android.vending")
-                startActivity(intent)
-            } catch (e: Exception) {
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=$appPackageName&hl=en_IN"))
-                startActivity(intent)
-            }
-            dialog.dismiss()
-        }
-
-        builder.setNegativeButton("Cancel") { dialog, _ ->
-            dialog.dismiss()
-        }
-
-        builder.setCancelable(false)
-        builder.create().show()
-    }
-
-
-
-}
 

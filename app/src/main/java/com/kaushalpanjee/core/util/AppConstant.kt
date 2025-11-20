@@ -31,7 +31,6 @@ object AppConstant {
         const val CAPTURE_INTENT_RESULT = "in.gov.uidai.rdservice.face.CAPTURE_RESULT"
         const val CAPTURE_INTENT_RESPONSE_DATA = "response"
         const val DEVICE_CHECK_INTENT_RESULT = "in.gov.uidai.rdservice.face.CHECK_DEVICE_RESULT"
-       // const val WADH_KEY = "sgydIC09zzy6f8Lb3xaAqzKquKe9lFcNR9uTvYxFp+A="
 
 
         var ENVIRONMENT_TAG = "P"//"S"
@@ -46,9 +45,7 @@ object AppConstant {
         const val PRE_PRODUCTION_CODE: String = "PP"
         const val CURRENT_ENVIRONMENT_CODE = PRE_PRODUCTION_CODE;
         const val PRODUCTION_CODE: String = "P"
-        //const val CRYPT_ID = "8080808080808080"
-        //const val CRYPT_IV = "8080808080808080"
-        //const val CRYPLIBAES = "AES/CBC/PKCS5PADDING"
+
         const val EXTRA_CLIENT_ID = "client_id"
         const val EXTRA_FETCH_USER_EMBEDDING = "fetch_user_embeddings"
         const val EXTRA_CALL_TYPE = "call_type"

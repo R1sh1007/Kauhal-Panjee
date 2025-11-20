@@ -63,8 +63,4 @@ object ApiConstant {
     const val  API_ULB= "${API_FOLDER_BACKEND}${API_FOLDER_CITIZEN}ulbList"
     const val  API_WARD= "${API_FOLDER_BACKEND}${API_FOLDER_CITIZEN}wardList"
 
-
-
-
-
 }
